@@ -2,8 +2,11 @@ import { prisma } from "@/lib/prisma";
 import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
 
+const VALID_ROLES = ["USER", "ADMIN"] as const;
+type Role = (typeof VALID_ROLES)[number];
+
 export async function POST(req: Request) {
-  const { name, email, password } = await req.json();
+  const { name, email, password, role } = await req.json();
 
   if (!email || !password) {
     return NextResponse.json(
@@ -11,6 +14,9 @@ export async function POST(req: Request) {
       { status: 400 }
     );
   }
+
+  const resolvedRole: Role =
+    role && VALID_ROLES.includes(role) ? role : "USER";
 
   const exists = await prisma.user.findUnique({
     where: { email },
@@ -30,7 +36,7 @@ export async function POST(req: Request) {
       name,
       email,
       password: hashedPassword,
-      role: "USER",
+      role: resolvedRole,
     },
   });
 
