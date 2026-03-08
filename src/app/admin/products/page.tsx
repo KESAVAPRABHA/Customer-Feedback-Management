@@ -2,13 +2,27 @@ import Link from "next/link";
 import ProductTable from "../components/ProductTable";
 import { prisma } from "@/lib/prisma";
 
+// Make sure Product type is defined/imported
+import { Product } from "../types"; // adjust path as needed
 
 export default async function Page() {
   const products = await prisma.product.findMany({
     orderBy: { createdAt: "desc" },
-    include: {
-    reviews: true}
+    include: { reviews: true }
   });
+
+  const formattedProducts: Product[] = products.map(product => ({
+    ...product,
+    price: Number(product.price), // Decimal → number
+    createdAt: product.createdAt.toISOString(), 
+    updatedAt: product.updatedAt.toISOString(),
+    reviews: product.reviews.map(review => ({
+      ...review,
+      createdAt: review.createdAt.toISOString(),
+      updatedAt: review.updatedAt.toISOString(),
+    }))
+  }));
+
   return (
     <div>
       <div className="flex justify-between mb-4">
@@ -22,7 +36,7 @@ export default async function Page() {
         </Link>
       </div>
 
-      <ProductTable products={products} />
+      <ProductTable products={formattedProducts} />
     </div>
   );
 }
