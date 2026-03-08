@@ -42,7 +42,6 @@ export default function LoginPage() {
           Login to CRM
         </h2>
 
-        {/* ROLE TOGGLE */}
         <div className="flex mb-4 rounded overflow-hidden border">
           {["USER", "ADMIN"].map((role) => (
             <button
