@@ -70,7 +70,7 @@ export default function ReviewCard({ review, onDelete, onUpdate }: ReviewCardPro
 
             {/* Actions */}
             <div className="flex items-center gap-2">
-              {canEdit && (
+              {canEdit && review.status === "UNRESOLVED" && (
                 <button
                   onClick={() => setShowEdit(true)}
                   className="px-3 py-1.5 text-xs font-medium border border-gray-200 rounded-lg hover:border-black hover:text-black transition-all"

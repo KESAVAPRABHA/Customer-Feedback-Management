@@ -15,7 +15,7 @@ export default function Home() {
           href="/register"
           className="px-6 py-3 bg-black text-white font-medium rounded-xl hover:bg-gray-800 transition-colors"
         >
-          Create free account
+          Create account
         </Link>
         <Link
           href="/login"

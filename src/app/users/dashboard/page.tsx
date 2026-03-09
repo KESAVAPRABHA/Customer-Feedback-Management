@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import StatsBar from "../../../components/users/StatsBar";
 import { Review } from "../types";
 
+export const dynamic = "force-dynamic";
 export default function UserDashboardPage() {
   const router = useRouter();
   const [reviews, setReviews] = useState<Review[]>([]);

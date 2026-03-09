@@ -20,7 +20,7 @@ export function middleware(req: NextRequest) {
   const { pathname, search } = req.nextUrl
 
   // Public routes that should never block
-  const PUBLIC_PATHS = ['/', '/login', '/api/login', '/favicon.ico']
+  const PUBLIC_PATHS = ['/', '/login', '/register', '/api/auth/login', '/api/auth/register', '/favicon.ico']
   const isPublic = PUBLIC_PATHS.some(p => pathname === p || pathname.startsWith(p + '/'))
   if (isPublic) return NextResponse.next()
 
