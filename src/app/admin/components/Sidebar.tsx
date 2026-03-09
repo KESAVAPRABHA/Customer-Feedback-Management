@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 const items = [
   { name: "Dashboard", path: "/admin" },
   { name: "Products", path: "/admin/products" },
-  { name: "Reviews", path: "/admin/reviews" },
+  // { name: "Reviews", path: "/admin/reviews" },
 ];
 
 export default function Sidebar() {
