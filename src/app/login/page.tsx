@@ -29,7 +29,7 @@ export default function LoginPage() {
 
     data.role === "ADMIN"
       ? router.push("/admin")
-      : router.push("/");
+      : router.push("/users/dashboard");
   }
 
   return (
