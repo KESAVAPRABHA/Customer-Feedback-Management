@@ -13,5 +13,11 @@ export async function POST(req: Request) {
     }
   })
 
+  // Update review status to RESOLVED
+  await prisma.review.update({
+    where: { id: body.reviewId },
+    data: { status: "RESOLVED" }
+  })
+
   return NextResponse.json(response)
 }
