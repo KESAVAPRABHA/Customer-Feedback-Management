@@ -75,9 +75,11 @@ enum Role {
 }
 
 enum Sentiment {
-  POSITIVE
-  NEUTRAL
-  NEGATIVE
+  EXCELLENT
+  GOOD
+  SATISFIED
+  BAD
+  POOR
 }
 
 enum ReviewStatus {
