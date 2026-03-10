@@ -5,6 +5,8 @@ import { prisma } from "@/lib/prisma";
 // Make sure Product type is defined/imported
 import { Product } from "../types"; // adjust path as needed
 
+export const dynamic = "force-dynamic";
+
 export default async function Page() {
   const products = await prisma.product.findMany({
     orderBy: { createdAt: "desc" },

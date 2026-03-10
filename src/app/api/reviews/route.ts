@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
         userId,
         rating,
         reviewText,
-        sentiment: sentimentMap[rating],
+        sentiment: sentimentMap[rating] as any,
       },
     });
 
