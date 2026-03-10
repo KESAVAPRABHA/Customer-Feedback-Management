@@ -12,11 +12,11 @@
 // }
 
 
-// middleware.ts
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { verifyToken } from '../lib/jwt'
 
-export function middleware(req: NextRequest) {
+export async function middleware(req: NextRequest) {
   const { pathname, search } = req.nextUrl
 
   // Public routes that should never block
@@ -28,8 +28,17 @@ export function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/users/dashboard', req.url))
   }
 
-  const role = req.cookies.get('role')?.value
-  const userId = req.cookies.get('userId')?.value
+  const token = req.cookies.get('auth-token')?.value
+  let role: string | undefined
+  let userId: string | undefined
+
+  if (token) {
+    const payload = await verifyToken(token)
+    if (payload) {
+      role = payload.role
+      userId = payload.userId
+    }
+  }
 
   // Not logged in → redirect to login
   if (!role || !userId) {

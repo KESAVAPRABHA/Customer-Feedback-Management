@@ -18,24 +18,23 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex h-screen bg-gray-100 overflow-hidden">
       {/* Sidebar */}
-      <aside className="w-64 bg-black text-white p-6 flex flex-col">
+      <aside className="w-64 bg-black text-white p-6 flex flex-col h-full overflow-y-auto">
         <div className="mb-8">
           <h1 className="text-xl font-bold">ReviewHub</h1>
           <p className="text-gray-400 text-xs mt-1">Customer Portal</p>
         </div>
 
-        <nav className="flex-1 space-y-1">
+        <nav className="flex-1 space-y-1 mb-8">
           {navItems.map((item) => (
             <Link
               key={item.path}
               href={item.path}
-              className={`block px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                path === item.path
+              className={`block px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${path === item.path
                   ? "bg-blue-600 text-white"
                   : "text-gray-300 hover:bg-gray-800 hover:text-white"
-              }`}
+                }`}
             >
               {item.name}
             </Link>
@@ -51,7 +50,7 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-8 overflow-auto">
+      <main className="flex-1 p-8 overflow-y-auto h-full">
         {children}
       </main>
     </div>

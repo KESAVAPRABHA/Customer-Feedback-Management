@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { verifyToken } from "@/lib/jwt";
 
 // PATCH - Update a review
 export async function PATCH(
@@ -7,7 +8,17 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const userId = req.cookies.get("userId")?.value;
+    const token = req.cookies.get("auth-token")?.value;
+    if (!token) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const payload = await verifyToken(token);
+    const userId = payload?.userId;
+
     if (!userId) {
       return NextResponse.json(
         { error: "Unauthorized" },
@@ -70,7 +81,7 @@ export async function PATCH(
       data: {
         rating: rating || existingReview.rating,
         reviewText: reviewText || existingReview.reviewText,
-        sentiment: rating ? sentimentMap[rating] : existingReview.sentiment,
+        sentiment: rating ? (sentimentMap[rating] as any) : existingReview.sentiment,
       },
     });
 
@@ -90,7 +101,17 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const userId = req.cookies.get("userId")?.value;
+    const token = req.cookies.get("auth-token")?.value;
+    if (!token) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const payload = await verifyToken(token);
+    const userId = payload?.userId;
+
     if (!userId) {
       return NextResponse.json(
         { error: "Unauthorized" },
