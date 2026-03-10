@@ -38,11 +38,10 @@ export default function MyReviewsPage() {
     fetchReviews();
   }, [fetchReviews]);
 
-  // Auto-refresh every 15 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       fetchReviews();
-    }, 15000);
+    }, 1500000);
 
     return () => clearInterval(interval);
   }, [fetchReviews]);
@@ -119,7 +118,7 @@ export default function MyReviewsPage() {
       {/* Reviews */}
       {filtered.length === 0 ? (
         <div className="text-center py-16 bg-white shadow rounded-xl">
-          <div className="text-5xl mb-4">📝</div>
+          <div className="text-5xl mb-4"></div>
           <h3 className="text-gray-700 font-semibold text-lg">No reviews found</h3>
           <p className="text-gray-400 text-sm mt-1">
             {filter === "all" ? "You haven't written any reviews yet." : `No ${filter} reviews.`}

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import StarRating from "./StarRating";
 import ReviewModal from "./ReviewModal";
 import { Product, Review } from "../../app/users/types";
@@ -12,7 +12,23 @@ interface ProductCardProps {
 
 export default function ProductCard({ product, userReview, onReviewUpdate }: ProductCardProps) {
   const [showModal, setShowModal] = useState(false);
+  const [userName, setUserName] = useState<string>("");
   const canEdit = userReview && new Date() < new Date(userReview.editableUntil);
+
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      try {
+        const res = await fetch("/api/auth/me");
+        if (res.ok) {
+          const user = await res.json();
+          setUserName(user.name || user.email);
+        }
+      } catch (error) {
+        console.error("Failed to fetch current user:", error);
+      }
+    };
+    fetchCurrentUser();
+  }, []);
 
   const fallbackImage = `https://ui-avatars.com/api/?name=${encodeURIComponent(product.name)}&background=000000&color=fff&size=400&bold=true`;
 
@@ -84,6 +100,7 @@ export default function ProductCard({ product, userReview, onReviewUpdate }: Pro
         <ReviewModal
           productName={product.name}
           productId={product.id}
+          userName={userName}
           existingReview={canEdit && userReview ? {
             id: userReview.id,
             rating: userReview.rating,
