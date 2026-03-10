@@ -1,31 +1,26 @@
-FROM node:25-alpine AS deps
+# Use a stable LTS (optional, but recommended)
+FROM node:20-alpine AS deps
+
 WORKDIR /app
-COPY package.json package-lock.json* ./
-COPY prisma ./prisma
+
+# Install dependencies first for better caching
+COPY package*.json ./
 RUN npm install
+
+# Copy source
+COPY . .
+
+# --- Build-time database URL (placeholder OK) ---
+ARG DATABASE_URL
+ENV DATABASE_URL=${DATABASE_URL}
+
+# Generate Prisma Client (needs DATABASE_URL in Prisma 7)
 RUN npx prisma generate
 
-FROM node:20-alpine AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-# Set environment variables if needed during build
-# ENV NEXT_TELEMETRY_DISABLED 1
+# Build your app (for Next.js; if not, adjust accordingly)
 RUN npm run build
-
-FROM node:25-alpine AS runner
-WORKDIR /app
-ENV NODE_ENV=production
-# ENV NEXT_TELEMETRY_DISABLED=1
-
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/prisma ./prisma
 
 EXPOSE 3000
 
-ENV PORT=3000
-
-CMD ["npm", "start"]
+# Do NOT bake secrets here; pass at runtime
+CMD ["npm", "run", "start"]
