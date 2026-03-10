@@ -92,6 +92,17 @@ export default function ReviewModal({ review }: any) {
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+              <span className="text-white text-sm font-bold">
+                {review.user?.name?.[0]?.toUpperCase() || "U"}
+              </span>
+            </div>
+            <div>
+              <p className="font-semibold text-gray-900">{review.user?.name || "Anonymous"}</p>
+              <p className="text-xs text-gray-500">{review.user?.email}</p>
+            </div>
+          </div>
           <p className="font-bold text-gray-900 text-lg">{review.reviewText}</p>
           <div className="flex items-center gap-4 mt-2">
             <StarRating rating={review.rating} readonly size="sm" />

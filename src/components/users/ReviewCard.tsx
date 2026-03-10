@@ -1,6 +1,6 @@
 "use client";
 //for my-review page
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import StarRating from "./StarRating";
 import ReviewModal from "./ReviewModal";
 import { Review } from "../../app/users/types";
@@ -14,6 +14,22 @@ interface ReviewCardProps {
 export default function ReviewCard({ review, onDelete, onUpdate }: ReviewCardProps) {
   const [showEdit, setShowEdit] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [userName, setUserName] = useState<string>("");
+
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      try {
+        const res = await fetch("/api/auth/me");
+        if (res.ok) {
+          const user = await res.json();
+          setUserName(user.name || user.email);
+        }
+      } catch (error) {
+        console.error("Failed to fetch current user:", error);
+      }
+    };
+    fetchCurrentUser();
+  }, []);
 
   const canEdit = new Date() < new Date(review.editableUntil);
   const timeLeft = canEdit
@@ -122,11 +138,11 @@ export default function ReviewCard({ review, onDelete, onUpdate }: ReviewCardPro
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-6 h-6 bg-black rounded-full flex items-center justify-center">
                     <span className="text-white text-xs font-bold">
-                      {response.admin.name?.[0]?.toUpperCase() || "A"}
+                      A
                     </span>
                   </div>
                   <span className="text-xs font-semibold text-gray-700">
-                    {response.admin.name || "Admin"}
+                    ADMIN
                   </span>
                   <span className="text-xs text-gray-400 ml-auto">
                     {new Date(response.createdAt).toLocaleDateString("en-US", {
@@ -152,6 +168,7 @@ export default function ReviewCard({ review, onDelete, onUpdate }: ReviewCardPro
         <ReviewModal
           productName={review.product.name}
           productId={review.product.id}
+          userName={userName}
           existingReview={{
             id: review.id,
             rating: review.rating,

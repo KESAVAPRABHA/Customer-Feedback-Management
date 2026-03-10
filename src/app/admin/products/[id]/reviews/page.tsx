@@ -14,7 +14,8 @@ export default async function Reviews({
     where: { productId: id },
     orderBy: { createdAt: "desc" },
     include :{
-      responses:true
+      responses:true,
+      user: true
     }
   })
 
