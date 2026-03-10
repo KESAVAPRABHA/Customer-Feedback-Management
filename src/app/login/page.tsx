@@ -13,7 +13,7 @@ export default function LoginPage() {
     const res = await fetch("/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email, password, expectedRole: loginAs }),
     });
 
     const data = await res.json();
@@ -44,11 +44,10 @@ export default function LoginPage() {
             <button
               key={role}
               onClick={() => setLoginAs(role as "USER" | "ADMIN")}
-              className={`flex-1 p-2 font-medium ${
-                loginAs === role
+              className={`flex-1 p-2 font-medium ${loginAs === role
                   ? "bg-black text-white"
                   : "bg-white text-black"
-              }`}
+                }`}
             >
               {role === "ADMIN" ? "Admin" : "User"}
             </button>

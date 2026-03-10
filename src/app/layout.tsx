@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "FeedbackFlow — Customer Feedback Management",
+  title: "Customer Feedback Management",
   description: "Manage and respond to customer feedback efficiently",
 };
 

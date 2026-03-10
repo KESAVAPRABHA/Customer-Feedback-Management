@@ -1,10 +1,18 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { cookies } from "next/headers";
+import { verifyToken } from "@/lib/jwt";
 
 export async function GET() {
   const cookieStore = await cookies();
-  const userId = cookieStore.get("userId")?.value;
+  const token = cookieStore.get("auth-token")?.value;
+
+  if (!token) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const payload = await verifyToken(token);
+  const userId = payload?.userId;
 
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -15,7 +23,7 @@ export async function GET() {
     include: {
       product: true,
       responses: {
-        include:{
+        include: {
           admin: {
             select: {
               id: true,

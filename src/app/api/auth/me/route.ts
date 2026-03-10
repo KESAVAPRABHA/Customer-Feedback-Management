@@ -1,11 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { verifyToken } from "@/lib/jwt";
 
 export async function GET(req: NextRequest) {
   try {
-    const userId = req.cookies.get("userId")?.value;
+    const token = req.cookies.get("auth-token")?.value;
 
-    if (!userId) {
+    if (!token) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const payload = await verifyToken(token);
+
+    if (!payload?.userId) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
@@ -13,7 +23,7 @@ export async function GET(req: NextRequest) {
     }
 
     const user = await prisma.user.findUnique({
-      where: { id: userId },
+      where: { id: payload.userId },
       select: {
         id: true,
         name: true,

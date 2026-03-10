@@ -1,10 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { verifyToken } from "@/lib/jwt";
 
 // POST - Create a new review
 export async function POST(req: NextRequest) {
   try {
-    const userId = req.cookies.get("userId")?.value;
+    const token = req.cookies.get("auth-token")?.value;
+    if (!token) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const payload = await verifyToken(token);
+    const userId = payload?.userId;
+
     if (!userId) {
       return NextResponse.json(
         { error: "Unauthorized" },

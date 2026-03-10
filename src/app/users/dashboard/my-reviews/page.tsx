@@ -104,11 +104,10 @@ export default function MyReviewsPage() {
           <button
             key={f}
             onClick={() => setFilter(f)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              filter === f
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${filter === f
                 ? "bg-black text-white"
                 : "bg-white text-gray-600 border border-gray-200 hover:border-gray-400"
-            }`}
+              }`}
           >
             {f === "all" ? "All" : f === "responded" ? "Responded" : "Pending"}
           </button>

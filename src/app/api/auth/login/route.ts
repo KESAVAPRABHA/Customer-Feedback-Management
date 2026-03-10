@@ -1,9 +1,10 @@
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
+import { signToken } from "@/lib/jwt";
 
 export async function POST(req: Request) {
-  const { email, password } = await req.json();
+  const { email, password, expectedRole } = await req.json();
 
   if (!email || !password) {
     return NextResponse.json(
@@ -32,17 +33,20 @@ export async function POST(req: Request) {
     );
   }
 
+  if (expectedRole && user.role !== expectedRole) {
+    return NextResponse.json(
+      { error: `Account exists but is not registered as ${expectedRole}` },
+      { status: 403 }
+    );
+  }
+
+  const token = await signToken({ userId: user.id, role: user.role });
+
   const res = NextResponse.json({
     role: user.role,
   });
 
-  res.cookies.set("role", user.role, {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-  });
-
-  res.cookies.set("userId", user.id, {
+  res.cookies.set("auth-token", token, {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
