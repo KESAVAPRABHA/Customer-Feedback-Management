@@ -61,6 +61,12 @@ export default function ProductTable({ products }: { products: Product[] }) {
           {/* ACTIONS */}
           <div className="flex gap-2 flex-shrink-0">
             <Link 
+              href={`/admin/products/${p.id}/analysis`} 
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+            >
+              Analysis
+            </Link>
+            <Link 
               href={`/admin/products/${p.id}/reviews`} 
               className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors"
             >

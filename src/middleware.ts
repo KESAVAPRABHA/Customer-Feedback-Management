@@ -28,6 +28,11 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/users/dashboard', req.url))
   }
 
+  if (pathname === '/admin') {
+    return NextResponse.redirect(new URL('/admin/products', req.url))
+  }
+
+
   const token = req.cookies.get('auth-token')?.value
   let role: string | undefined
   let userId: string | undefined
