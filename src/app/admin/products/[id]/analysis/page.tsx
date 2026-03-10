@@ -6,6 +6,8 @@ import { notFound } from "next/navigation";
 import RatingDistributionChart from "../../../charts/RatingDistributionChart";
 import StatusChart from "../../../charts/StatusChart";
 
+export const dynamic = "force-dynamic";
+
 export default async function AnalysisPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 

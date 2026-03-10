@@ -3,6 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { Review } from "@prisma/client"; // Import the type
 import ReviewCard from "../../../components/ReviewModal"
 
+export const dynamic = "force-dynamic";
+
 export default async function Reviews({
   params
 }: {
